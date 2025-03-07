@@ -49,4 +49,12 @@ if botao is not None:
 if Botoes is not None:
     print("Botoes encontrado")
 
+campo_nome = driver.find_element(By.NAME,'seu-nome')
+radio_buttons = driver.find_elements(By.NAME, 'exampleRadios')
+
+if campo_nome is not None:
+    print("campo_nome encontrado")
+if radio_buttons is not None:
+    print("radio_buttons encontrado")
+
 input('')
