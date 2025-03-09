@@ -41,21 +41,17 @@ def iniciar_driver():
 driver = iniciar_driver()
 driver.get('https://cursoautomacao.netlify.app/')
 
-botao = driver.find_element(By.ID,'buttonalerta')
-Botoes = driver.find_elements(By.ID,'buttonalerta')
-
-if botao is not None:
-    print("Botao encontrado")
-if Botoes is not None:
-    print("Botoes encontrado")
-
-campo_nome = driver.find_element(By.NAME,'seu-nome')
-radio_buttons = driver.find_elements(By.NAME, 'exampleRadios')
-
-if campo_nome is not None:
-    print("campo_nome encontrado")
-if radio_buttons is not None:
-    print("radio_buttons encontrado")
+driver.maximize_window()  # maximizar a janela
+driver.refresh()  # recarrega página atual
+driver.get(driver.current_url)  # recarrega página atual
+driver.back()  # volta à página anterior
+driver.forward()  # navega 1 vez para frente
+print(driver.title)  # Obtem título da página
+print(driver.current_url)  # Obtem URL(endereço) da página atual
+print(driver.page_source)  # Obtem o código fonte da página atual
+# obtem o texto dentro de um elemento
+print(driver.find_element(By.XPATH, '//a[@class="navbar-brand"]').text)
+print(driver.find_element(    By.XPATH, '//a[@class="navbar-brand"]').get_attribute("style"))
 
 input('')
 driver.close()

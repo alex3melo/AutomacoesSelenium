@@ -39,23 +39,16 @@ def iniciar_driver():
     return driver
 
 driver = iniciar_driver()
-driver.get('https://cursoautomacao.netlify.app/')
+driver.get('https://cursoautomacao.netlify.app/desafios')
 
-botao = driver.find_element(By.ID,'buttonalerta')
-Botoes = driver.find_elements(By.ID,'buttonalerta')
+botoes = driver.find_elements(By.XPATH, '//section[@class="jumbotron desafios1"]//button[starts-with(@class,"btn")]')
 
-if botao is not None:
-    print("Botao encontrado")
-if Botoes is not None:
-    print("Botoes encontrado")
-
-campo_nome = driver.find_element(By.NAME,'seu-nome')
-radio_buttons = driver.find_elements(By.NAME, 'exampleRadios')
-
-if campo_nome is not None:
-    print("campo_nome encontrado")
-if radio_buttons is not None:
-    print("radio_buttons encontrado")
+for botao in botoes:
+    if botao.is_enabled():
+        print(f'{botao.text} está habilidado')
+        
+    if botao.is_enabled() == False:
+        print(f'{botao.text} está Desabilitado')
 
 input('')
 driver.close()
