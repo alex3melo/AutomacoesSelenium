@@ -5,6 +5,8 @@ from selenium.webdriver.chrome.options import Options
 from time import sleep
 import random
 
+campo_texto = None
+
 def iniciar_driver():
     chrome_options = Options()
     # Fonte de opções de switches https://peter.sh/experiments/chromium-command-line-switches/
@@ -48,8 +50,11 @@ sleep(2)
 driver.execute_script("window.scrollTo(0, 1000)")
 sleep(2)
 
-#texto = driver.find_element(By.XPATH, '//textarea[@id="campoparagrafo"]')
-texto = driver.find_element(By.ID, 'campoparagrafo')
+#campo_texto = driver.find_element(By.XPATH, '//textarea[@id="campoparagrafo"]')
+campo_texto = driver.find_element(By.ID, 'campoparagrafo')
+"""
+if campo_texto is not None:
+    print("Campo encontrado")
 """
 def digitar_naturalmente(texto, elemento):
     for letra in texto:
@@ -58,6 +63,6 @@ def digitar_naturalmente(texto, elemento):
 
 texto = 'Aqui recomendo que você sempre tenha essa história pronta para contar de uma forma que saliente o seu interesse por a área. Isso porque caso você realmente esteja interessado na vaga, desta maneira você irá mostrar a quem estiver te analisando que você tem uma grande probabilidade de ser um profissional mais engajado com as tarefas da empresa. Capriche nessa história.Muitos aqui iram dizer coisas como: porque vocês são uma ótima empresa, porque todos falam bem de você. Mas alerto: seja autêntico na sua resposta  as empresas querem aqui saber se você pesquisou sobre a empresa e como o seu skillset (seu conhecimento) pode agregar para a empresa, então use essa oportunidade para falar como a EMPRESA vai ganhar contratando você. Não diga coisas como: sempre foi meu sonho trabalhar aqui! As empresas não ganham nada com seu sonho de querer trabalhar lá (triste, mas é a realidade), então mostre o que você tem de melhor para ajudar a empresa crescer. No meu caso a resposta que dei foi a seguinte: “Amo aprender e ensinar e estou constantemente me atualizando, além de gostar muito de ensinar e aprender com os outros integrantes da equipe, percebi que vocês em uma cultura internacional e isso me chamou muita atenção, seria ótimo poder trabalhar com vocês!'
 digitar_naturalmente(texto,campo_texto)
-"""
+
 input('')
 driver.close()
