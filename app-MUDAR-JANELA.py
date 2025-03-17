@@ -1,19 +1,13 @@
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.options import Options
-from selenium.webdriver.common.action_chains import ActionChains
-from selenium.webdriver.common.keys import Keys
 from time import sleep
-import random
-
-UserUNI = '16100282.1'
-Passw = ''
 
 def iniciar_driver():
     chrome_options = Options()
     # Fonte de opções de switches https://peter.sh/experiments/chromium-command-line-switches/
 
-    arguments = ['--lang=pt-BR', '--window-size=1000,1000',
+    arguments = ['--lang=pt-BR', '--window-size=1000,900',
                 '--incognito']
     ''' Common arguments
     --start-maximized # Inicia maximizado
@@ -44,67 +38,41 @@ def iniciar_driver():
     driver = webdriver.Chrome(options=chrome_options)
     return driver
 
-def digitar_naturalmente(texto, elemento):
-    for letra in texto:
-        elemento.send_keys(letra)
-        sleep(random.randint(1, 5)/30)
-
 driver = iniciar_driver()
-action = ActionChains(driver)
-
-driver.get('https://unimedcerrado.topsaude.com.br/PortalCredenciado/')
-driver.maximize_window()
-sleep(2)
-
-usuario = driver.find_element(By.XPATH, '//input[@id="usuario"]')
-digitar_naturalmente(UserUNI,usuario)
-
-sleep(2)
-senha = driver.find_element(By.XPATH, '//input[@id="senha"]')
-digitar_naturalmente(Passw,senha)
-
+driver.get('https://cursoautomacao.netlify.app/desafios')
 sleep(1)
-entrar = driver.find_element(By.XPATH, '//input[@id="login-submit"]')
-entrar.click()
 
-sleep(5)
-aviso = driver.find_element(By.CLASS_NAME, 'btn.btn-primary')
-aviso.click()
-
-sleep(2)
-link_tiss = driver.find_element(By.XPATH, '//a[@href="#PORCRED50"]')
-
-action.move_to_element_with_offset(link_tiss,2,2)
-action.perform()
-
-link_tiss.send_keys(Keys.ENTER)
-
+janela_inicial = driver.current_window_handle
+print(janela_inicial)
+driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
 sleep(1)
-link_digtiss = driver.find_element(By.XPATH, '//a[@href="#PORCRED50.5"]')
 
-action.move_to_element_with_offset(link_digtiss,2,2)
-action.perform()
+botao_janela = driver.find_element(By.XPATH, '//button[@onclick="abrirJanelaDesafio()"]')
+driver.execute_script('arguments[0].click()', botao_janela)
 sleep(1)
-link_digtiss.send_keys(Keys.TAB)
 
-sleep(1)
-link_LoteFat = driver.find_element(By.XPATH, '//a[@data-href="/PortalCredenciado/HomePortalCredenciado/DigitacaoTiss/LoteFaturamento?tituloFuncao=Lote de Faturamento"]')
-action.move_to_element_with_offset(link_LoteFat,2,2)
-action.perform()
+janelas = driver.window_handles
+print(janelas)
+for janela in janelas:
+    if janela not in janela_inicial:
+        #mudar janela 
+        print(janela)
+        driver.switch_to.window(janela)
+        sleep(1)
+        campo_texto = driver.find_element(By.XPATH, '//textarea[@id="opiniao_sobre_curso"]')
+        #campo_texto.click()
+        campo_texto.send_keys('desafio')
+        sleep(1)
+        botao_pesquisar = driver.find_element(By.XPATH, '//button[@id="fazer_pesquisa"]')
+        botao_pesquisar.click
+        sleep(3)
+        driver.close()
 
-sleep(1)
-action.click(link_LoteFat)
-action.perform()
+driver.switch_to.window(janela_inicial)
 
-paciente = None
-sleep(10)
-
-for linha in driver.find_elements(By.XPATH, '//table[@id="TabContainerRemessa_TPNovaRemessa_gridBuscaRemessa"]//tbody//tr'):
-    """paciente = {
-        "ncarteira": 'td[5]//span'
-        "nome": 'td[5]//span'
-    }"""
-    print(linha)
+campo_texto_final = driver.find_element(By.XPATH, '//textarea[@id="campo_desafio7"]')
+campo_texto_final.click()
+campo_texto_final.send_keys('Finalizado!')
 
 input('')
 driver.close()
