@@ -3,10 +3,12 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.common.keys import Keys
+from bs4 import BeautifulSoup
+import pandas as pd
 from time import sleep
 import random
 
-UserUNI = '16100282.1'
+UserUNI = ''
 Passw = ''
 
 def iniciar_driver():
@@ -99,12 +101,24 @@ action.perform()
 paciente = None
 sleep(10)
 
-for linha in driver.find_elements(By.XPATH, '//table[@id="TabContainerRemessa_TPNovaRemessa_gridBuscaRemessa"]//tbody//tr'):
-    """paciente = {
-        "ncarteira": 'td[5]//span'
-        "nome": 'td[5]//span'
-    }"""
-    print(linha)
+# Encontrar a iframe
+iframe = driver.find_element(By.XPATH, "//iframe[@src='/PortalCredenciado/HomePortalCredenciado/DigitacaoTiss/LoteFaturamento?tituloFuncao=Lote de Faturamento']")
+# Mudar para dentro da iframe
+driver.switch_to.frame(iframe)
+
+#elementos = driver.find_elements(By.XPATH, '//table[@id="TabContainerRemessa_TPNovaRemessa_gridBuscaRemessa"]//tbody/tr[1]/th')
+
+tabelahtml = driver.find_element(By.XPATH, '//table[@id="TabContainerRemessa_TPNovaRemessa_gridBuscaRemessa"]')
+
+htmlcontent = tabelahtml.get_attribute("outerHTML")
+
+soup = BeautifulSoup(htmlcontent, "html.parser")
+
+tabela = soup.find(nome="tabela")
+print(tabela)
+df = pd.read_html(str(tabela))[0]
+
+df.to_csv("tabela.csv", encoding="UTF-8", sep=";", index=False)
 
 input('')
 driver.close()
