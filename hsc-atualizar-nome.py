@@ -7,6 +7,9 @@ from bs4 import BeautifulSoup
 import pandas as pd
 from time import sleep
 import random
+from io import StringIO
+import os
+
 
 UserUNI = ''
 Passw = ''
@@ -50,6 +53,26 @@ def digitar_naturalmente(texto, elemento):
     for letra in texto:
         elemento.send_keys(letra)
         sleep(random.randint(1, 5)/30)
+
+def salvarMatriculaNome(tabelahtml):
+    htmlcontent = tabelahtml.get_attribute("outerHTML")
+
+    soup = BeautifulSoup(htmlcontent, "html.parser")
+
+    tabela = soup.find(name="table")
+
+    df = pd.read_html(StringIO(str(tabela)))[0]
+
+    #REMOVER COLUNAS
+    df = df.drop(df.columns[[0, 1, 2, 3, 6, 7]], axis=1)
+    df.drop_duplicates(keep='first', inplace=True)
+
+    if os.path.exists('tabela.csv'):
+        df2 = pd.read_csv("tabela.csv", sep=";")
+        df3 = pd.concat([df2,df])
+        df3.to_csv("tabela.csv", encoding="UTF-8", sep=";", index=False)
+    else:
+        df.to_csv("tabela.csv", encoding="UTF-8", sep=";", index=False)
 
 driver = iniciar_driver()
 action = ActionChains(driver)
@@ -106,19 +129,18 @@ iframe = driver.find_element(By.XPATH, "//iframe[@src='/PortalCredenciado/HomePo
 # Mudar para dentro da iframe
 driver.switch_to.frame(iframe)
 
-#elementos = driver.find_elements(By.XPATH, '//table[@id="TabContainerRemessa_TPNovaRemessa_gridBuscaRemessa"]//tbody/tr[1]/th')
+pacLocal = driver.find_element(By.XPATH, '//table[@id="TabContainerRemessa_TPNovaRemessa_gridBuscaRemessa"]')
 
-tabelahtml = driver.find_element(By.XPATH, '//table[@id="TabContainerRemessa_TPNovaRemessa_gridBuscaRemessa"]')
+salvarMatriculaNome(pacLocal)
+sleep(5)
 
-htmlcontent = tabelahtml.get_attribute("outerHTML")
+bot_intercambio = driver.find_element(By.ID, 'TabContainerRemessa_TPNovaRemessa_chkIntercambio_1')
+bot_intercambio.click()
+sleep(5)
 
-soup = BeautifulSoup(htmlcontent, "html.parser")
+pacInterCambio = driver.find_element(By.XPATH, '//table[@id="TabContainerRemessa_TPNovaRemessa_gridBuscaRemessa"]')
 
-tabela = soup.find(nome="tabela")
-print(tabela)
-df = pd.read_html(str(tabela))[0]
+salvarMatriculaNome(pacInterCambio)
+sleep(5)
 
-df.to_csv("tabela.csv", encoding="UTF-8", sep=";", index=False)
-
-input('')
 driver.close()
