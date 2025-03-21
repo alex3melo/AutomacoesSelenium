@@ -23,7 +23,8 @@ def lerDados(campos, guia):
     for campo in campos:
         if(len(campo) == 0):
             guia[str(campo.tag)] = str(campo.text)
-            print(campo.tag, campo.text, len(campo))
+            print(guia[str(campo.tag)])
+            #print(campo.tag, campo.text, len(campo))
         if(len(campo) > 0):
             lerDados(campo, guia)
 
@@ -34,7 +35,7 @@ def lerGuias(campos):
     
     for campo in campos:
         guia = {}
-
+        print(campo.tag, campo.text, len(campo))
         if(len(campo) == 0):
             #guia[str(campo.tag)] = str(campo.text)
             print(campo.tag, campo.text, len(campo))
@@ -43,14 +44,14 @@ def lerGuias(campos):
 
         list.append(guia)
 
-    return lista
 
 #lerDados(guiasTISS)
-guias = lerGuias(guiasTISS)
+lerGuias(guiasTISS)
+"""guias = lerGuias(guiasTISS)
 
 print('--------GUIA-------')
 print(f'Qnt Guias: {len(guias)}')
-
+"""
 
 
 
