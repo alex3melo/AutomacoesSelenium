@@ -13,36 +13,34 @@ print(raiz[1][0][1].tag)
 print("--------------------")
 """
 guiasTISS = raiz[1][0][1]
+listaGuias = []
+guia = {}
 
 #Remover prefixo no nome da tag
 for elem in raiz.iter():
     elem.tag = elem.tag[elem.tag.index('}')+1:]
 
 def lerDados(campos, guia):
-    lista = []
     for campo in campos:
         if(len(campo) == 0):
             guia[str(campo.tag)] = str(campo.text)
-            print(guia[str(campo.tag)])
-            #print(campo.tag, campo.text, len(campo))
+            #print(guia[str(campo.tag)])
+            print(campo.tag, campo.text)
+        if(len(campo) > 0):
+            lerDados(campo)
+
+
+def lerGuias(campos):
+    for campo in campos:
+        guia = {}
+        if(len(campo) == 0):
+            #guia[str(campo.tag)] = str(campo.text)
+            print(campo.tag, campo.text)
         if(len(campo) > 0):
             lerDados(campo, guia)
 
-    return guia
-
-def lerGuias(campos):
-    lista = []
-    
-    for campo in campos:
-        guia = {}
-        print(campo.tag, campo.text, len(campo))
-        if(len(campo) == 0):
-            #guia[str(campo.tag)] = str(campo.text)
-            print(campo.tag, campo.text, len(campo))
-        if(len(campo) > 0):
-            guia = lerDados(campo, guia)
-
-        list.append(guia)
+        #listaGuias.append(guia)
+        print(guia)
 
 
 #lerDados(guiasTISS)
