@@ -35,5 +35,7 @@ lerGuias(guiasTISS)
 
 df = pd.DataFrame(listaGuias)
 
-df.to_csv('xml.csv', index=False, sep=';')
+#df.to_csv('xml.csv', index=False, sep=';')
 print(df)
+
+print(listaGuias[0])
